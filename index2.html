@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🥕 Carrot Card</title>
+<style>
+:root {
+  --ink: #371a17;
+  --soft: #714139;
+  --paper: #fff7ee;
+  --leaf: #2f8f51;
+  --clay: #b83c33;
+  --line: #e7cdbb;
+  --shadow: rgba(72,32,22,0.16);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  font-family: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, sans-serif;
+  color: var(--ink);
+  background: radial-gradient(circle at 28% 18%, rgba(255,215,120,0.32), transparent 28%),
+              linear-gradient(180deg, #fffaf2 0%, #f6eadb 100%);
+  padding: 20px;
+}
+
+/* ── MAKER (your side) ── */
+.maker {
+  display: grid;
+  gap: 16px;
+  padding: 32px 24px;
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255,252,247,0.95);
+  box-shadow: 0 18px 42px var(--shadow);
+  max-width: 380px;
+  width: 100%;
+}
+.maker-title {
+  font-size: 18px;
+  font-weight: 900;
+  text-align: center;
+}
+.maker-sub {
+  font-size: 13px;
+  color: var(--soft);
+  text-align: center;
+  margin-top: -8px;
+}
+.field { display: grid; gap: 6px; }
+.field label {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--soft);
+  text-transform: lowercase;
+}
+.field input, .field textarea, .field select {
+  width: 100%;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: #fffdf9;
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  padding: 10px 12px;
+  outline: none;
+  transition: border 0.15s;
+}
+.field input:focus, .field textarea:focus, .field select:focus {
+  border-color: var(--leaf);
+}
+.field textarea { resize: vertical; min-height: 72px; }
+
+.link-box {
+  display: grid;
+  gap: 8px;
+}
+.link-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+.link-input {
+  width: 100%;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: #f5ede3;
+  color: var(--soft);
+  font: inherit;
+  font-size: 12px;
+  padding: 8px 12px;
+  outline: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.btn-copy {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: var(--clay);
+  color: white;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn-copy:hover { opacity: 0.85; }
+.copy-status {
+  font-size: 12px;
+  color: var(--leaf);
+  font-weight: 800;
+  min-height: 18px;
+  text-align: right;
+}
+.btn-preview {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid var(--leaf);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--leaf);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-preview:hover { background: var(--leaf); color: white; }
+
+/* ── RECEIVER (their side) ── */
+.receiver {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 40px 24px;
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255,252,247,0.95);
+  box-shadow: 0 18px 42px var(--shadow);
+  max-width: 340px;
+  width: 100%;
+  text-align: center;
+}
+.receiver.show { display: flex; }
+
+.hint { font-size: 15px; color: var(--soft); }
+
+.pot-btn {
+  position: relative;
+  width: 150px; height: 150px;
+  border: none; background: transparent;
+  cursor: pointer; border-radius: 12px;
+  transition: transform 160ms ease;
+  font-size: 0;
+}
+.pot-btn:hover { transform: translateY(-4px); }
+.pot-btn:active { transform: scale(0.95); }
+.pot-btn.popped { animation: pop 360ms ease both; }
+
+.pot-face {
+  position: absolute; inset: 0;
+  display: flex; align-items: center;
+  justify-content: center;
+  font-size: 80px;
+  transition: opacity 200ms, transform 200ms;
+}
+.pot-face.gone { opacity: 0; transform: scale(0.85); pointer-events: none; }
+
+.recv-msg {
+  font-size: clamp(18px,5vw,22px);
+  font-weight: 800;
+  line-height: 1.35;
+  color: var(--ink);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 250ms, transform 250ms;
+  padding: 0 8px;
+}
+.recv-msg.show { opacity: 1; transform: translateY(0); }
+
+.recv-from {
+  font-size: 13px;
+  color: var(--soft);
+  opacity: 0;
+  transition: opacity 400ms ease 200ms;
+}
+.recv-from.show { opacity: 1; }
+
+/* back button */
+.back-btn {
+  font-size: 12px;
+  color: var(--soft);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  font: inherit;
+  margin-top: 8px;
+}
+
+@keyframes pop {
+  0%   { transform: scale(1); }
+  45%  { transform: translateY(-10px) scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+/* emoji picker */
+.emoji-row {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.emoji-pick {
+  font-size: 22px; cursor: pointer;
+  padding: 4px 6px; border-radius: 8px;
+  border: 2px solid transparent;
+  transition: border 0.1s;
+  background: none;
+}
+.emoji-pick.active { border-color: var(--leaf); background: #e8f5ed; }
+</style>
+</head>
+<body>
+
+<!-- ══ MAKER SIDE (only you see this) ══ -->
+<div class="maker" id="makerView">
+  <div class="maker-title">🥕 carrot card maker</div>
+  <p class="maker-sub">create a card · share the link · they just tap</p>
+
+  <div class="field">
+    <label>your message</label>
+    <textarea id="msgInput" placeholder="I grew this tiny carrot just for you!">I grew this tiny carrot just for you!</textarea>
+  </div>
+
+  <div class="field">
+    <label>from</label>
+    <input type="text" id="fromInput" placeholder="— Neet 🌸" value="— Neet 🌸"/>
+  </div>
+
+  <div class="field">
+    <label>choose your gift 🎁</label>
+    <div class="emoji-row" id="emojiPicker">
+      <button class="emoji-pick active" onclick="pickEmoji(this,'🥕')">🥕</button>
+      <button class="emoji-pick" onclick="pickEmoji(this,'🌸')">🌸</button>
+      <button class="emoji-pick" onclick="pickEmoji(this,'🌻')">🌻</button>
+      <button class="emoji-pick" onclick="pickEmoji(this,'⭐')">⭐</button>
+      <button class="emoji-pick" onclick="pickEmoji(this,'🍰')">🍰</button>
+      <button class="emoji-pick" onclick="pickEmoji(this,'🎁')">🎁</button>
+      <button class="emoji-pick" onclick="pickEmoji(this,'🦋')">🦋</button>
+      <button class="emoji-pick" onclick="pickEmoji(this,'🐾')">🐾</button>
+    </div>
+  </div>
+
+  <div class="link-box">
+    <label style="font-size:13px;font-weight:800;color:var(--soft)">your shareable link</label>
+    <div class="link-row">
+      <input class="link-input" id="linkOut" readonly/>
+      <button class="btn-copy" onclick="copyLink()">copy</button>
+    </div>
+    <p class="copy-status" id="copyStatus"></p>
+  </div>
+
+  <button class="btn-preview" onclick="preview()">preview what they see 👀</button>
+</div>
+
+<!-- ══ RECEIVER SIDE (what they see) ══ -->
+<div class="receiver" id="receiverView">
+  <p class="hint" id="hint">tap to open 🌱</p>
+
+  <button class="pot-btn" id="potBtn" onclick="tapPot()">
+    <div class="pot-face" id="potEmpty">
+  <img src="empty-pot.png" style="width:120px;image-rendering:pixelated"/>
+</div>
+<div class="pot-face gone" id="potFull">
+  <img src="carrot-pot.png" style="width:120px;image-rendering:pixelated"/>
+</div>
+  </button>
+
+  <p class="recv-msg" id="recvMsg"></p>
+  <p class="recv-from" id="recvFrom"></p>
+
+  <button class="back-btn" id="backBtn" onclick="goBack()" style="display:none">← make your own</button>
+</div>
+
+<script>
+let chosenEmoji = '🥕';
+let grown = false;
+let resetTimer;
+
+// ── Emoji picker ──
+function pickEmoji(el, emoji) {
+  document.querySelectorAll('.emoji-pick').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  chosenEmoji = emoji;
+  document.getElementById('potFull').textContent = emoji;
+  buildLink();
+}
+
+// ── Build shareable link ──
+function buildLink() {
+  const msg  = document.getElementById('msgInput').value.trim() || 'I grew this for you!';
+  const from = document.getElementById('fromInput').value.trim() || '🌸';
+  const url  = new URL(window.location.href);
+  url.searchParams.set('msg',   msg);
+  url.searchParams.set('from',  from);
+  url.searchParams.set('emoji', chosenEmoji);
+  url.searchParams.delete('view'); // maker mode — no view param
+  document.getElementById('linkOut').value = url.toString();
+  document.getElementById('copyStatus').textContent = '';
+}
+
+// ── Copy link ──
+async function copyLink() {
+  buildLink();
+  const val = document.getElementById('linkOut').value;
+  try {
+    await navigator.clipboard.writeText(val);
+    document.getElementById('copyStatus').textContent = '✓ copied! send it on whatsapp 🌸';
+  } catch {
+    document.getElementById('copyStatus').textContent = 'select and copy manually';
+  }
+}
+
+// ── Preview ──
+function preview() {
+  const msg   = document.getElementById('msgInput').value.trim() || 'I grew this for you!';
+  const from  = document.getElementById('fromInput').value.trim() || '🌸';
+  showReceiver(msg, from, chosenEmoji, true);
+}
+
+// ── Show receiver view ──
+function showReceiver(msg, from, emoji, isPreview) {
+  document.getElementById('makerView').style.display = 'none';
+  document.getElementById('recvMsg').textContent  = msg;
+  document.getElementById('recvFrom').textContent = from;
+  document.getElementById('potFull').textContent  = emoji || '🥕';
+  document.getElementById('backBtn').style.display = isPreview ? 'block' : 'none';
+  document.getElementById('receiverView').classList.add('show');
+}
+
+// ── Tap pot ──
+function tapPot() {
+  if(grown) { resetPot(); return; }
+  grown = true;
+  document.getElementById('potBtn').classList.add('popped');
+  document.getElementById('potEmpty').classList.add('gone');
+  document.getElementById('potFull').classList.remove('gone');
+  document.getElementById('hint').textContent = 'a little something for you 🥕';
+  document.getElementById('recvMsg').classList.add('show');
+  document.getElementById('recvFrom').classList.add('show');
+  clearTimeout(resetTimer);
+  resetTimer = setTimeout(resetPot, 12000);
+}
+
+function resetPot() {
+  grown = false;
+  document.getElementById('potBtn').classList.remove('popped');
+  document.getElementById('potEmpty').classList.remove('gone');
+  document.getElementById('potFull').classList.add('gone');
+  document.getElementById('hint').textContent = 'tap to open 🌱';
+  document.getElementById('recvMsg').classList.remove('show');
+  document.getElementById('recvFrom').classList.remove('show');
+}
+
+function goBack() {
+  document.getElementById('receiverView').classList.remove('show');
+  document.getElementById('makerView').style.display = 'grid';
+  resetPot();
+}
+
+// ── Auto-update link as you type ──
+document.getElementById('msgInput').addEventListener('input', buildLink);
+document.getElementById('fromInput').addEventListener('input', buildLink);
+
+// ── On load — check if receiver mode ──
+const params = new URLSearchParams(window.location.search);
+if(params.get('msg')) {
+  // Someone opened a shared link — show receiver only
+  showReceiver(
+    params.get('msg')   || 'I grew this for you!',
+    params.get('from')  || '🌸',
+    params.get('emoji') || '🥕',
+    false
+  );
+} else {
+  // No params — show maker
+  buildLink();
+}
+</script>
+</body>
+</html>
