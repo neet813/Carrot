@@ -3,12 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🥕 Carrot Card</title>
+<title>🥕 A little something for you</title>
 <style>
 :root {
   --ink: #371a17;
   --soft: #714139;
-  --paper: #fff7ee;
   --leaf: #2f8f51;
   --clay: #b83c33;
   --line: #e7cdbb;
@@ -26,7 +25,7 @@ body {
   padding: 20px;
 }
 
-/* ── MAKER (your side) ── */
+/* ── MAKER (your private side) ── */
 .maker {
   display: grid;
   gap: 16px;
@@ -38,125 +37,57 @@ body {
   max-width: 380px;
   width: 100%;
 }
-.maker-title {
-  font-size: 18px;
-  font-weight: 900;
-  text-align: center;
-}
-.maker-sub {
-  font-size: 13px;
-  color: var(--soft);
-  text-align: center;
-  margin-top: -8px;
-}
+.maker-title { font-size: 18px; font-weight: 900; text-align: center; }
+.maker-sub { font-size: 13px; color: var(--soft); text-align: center; margin-top: -8px; }
 .field { display: grid; gap: 6px; }
-.field label {
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--soft);
-  text-transform: lowercase;
+.field label { font-size: 13px; font-weight: 800; color: var(--soft); text-transform: lowercase; }
+.field input, .field textarea {
+  width: 100%; border: 2px solid var(--line); border-radius: 8px;
+  background: #fffdf9; color: var(--ink); font: inherit;
+  font-size: 15px; padding: 10px 12px; outline: none; transition: border 0.15s;
 }
-.field input, .field textarea, .field select {
-  width: 100%;
-  border: 2px solid var(--line);
-  border-radius: 8px;
-  background: #fffdf9;
-  color: var(--ink);
-  font: inherit;
-  font-size: 15px;
-  padding: 10px 12px;
-  outline: none;
-  transition: border 0.15s;
-}
-.field input:focus, .field textarea:focus, .field select:focus {
-  border-color: var(--leaf);
-}
+.field input:focus, .field textarea:focus { border-color: var(--leaf); }
 .field textarea { resize: vertical; min-height: 72px; }
-
-.link-box {
-  display: grid;
-  gap: 8px;
-}
-.link-row {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 8px;
-}
+.link-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
 .link-input {
-  width: 100%;
-  border: 2px solid var(--line);
-  border-radius: 8px;
-  background: #f5ede3;
-  color: var(--soft);
-  font: inherit;
-  font-size: 12px;
-  padding: 8px 12px;
-  outline: none;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  width: 100%; border: 2px solid var(--line); border-radius: 8px;
+  background: #f5ede3; color: var(--soft); font: inherit;
+  font-size: 12px; padding: 8px 12px; outline: none;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .btn-copy {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 8px;
-  background: var(--clay);
-  color: white;
-  font: inherit;
-  font-size: 13px;
-  font-weight: 800;
-  cursor: pointer;
-  white-space: nowrap;
+  padding: 8px 16px; border: none; border-radius: 8px;
+  background: var(--clay); color: white; font: inherit;
+  font-size: 13px; font-weight: 800; cursor: pointer; white-space: nowrap;
 }
 .btn-copy:hover { opacity: 0.85; }
-.copy-status {
-  font-size: 12px;
-  color: var(--leaf);
-  font-weight: 800;
-  min-height: 18px;
-  text-align: right;
-}
+.copy-status { font-size: 12px; color: var(--leaf); font-weight: 800; min-height: 18px; text-align: right; }
 .btn-preview {
-  width: 100%;
-  padding: 12px;
-  border: 2px solid var(--leaf);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--leaf);
-  font: inherit;
-  font-size: 14px;
-  font-weight: 800;
-  cursor: pointer;
-  transition: all 0.15s;
+  width: 100%; padding: 12px; border: 2px solid var(--leaf);
+  border-radius: 8px; background: transparent; color: var(--leaf);
+  font: inherit; font-size: 14px; font-weight: 800; cursor: pointer; transition: all 0.15s;
 }
 .btn-preview:hover { background: var(--leaf); color: white; }
 
-/* ── RECEIVER (their side) ── */
+/* ── RECEIVER (what they see) ── */
 .receiver {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  padding: 40px 24px;
-  border: 2px solid var(--line);
-  border-radius: 16px;
+  display: none; flex-direction: column;
+  align-items: center; gap: 24px;
+  padding: 48px 24px;
+  border: 2px solid var(--line); border-radius: 16px;
   background: rgba(255,252,247,0.95);
   box-shadow: 0 18px 42px var(--shadow);
-  max-width: 340px;
-  width: 100%;
-  text-align: center;
+  max-width: 320px; width: 100%; text-align: center;
 }
 .receiver.show { display: flex; }
-
 .hint { font-size: 15px; color: var(--soft); }
 
+/* POT */
 .pot-btn {
-  position: relative;
-  width: 150px; height: 150px;
+  position: relative; width: 160px; height: 160px;
   border: none; background: transparent;
   cursor: pointer; border-radius: 12px;
-  transition: transform 160ms ease;
-  font-size: 0;
+  transition: transform 160ms ease; font-size: 0;
 }
 .pot-btn:hover { transform: translateY(-4px); }
 .pot-btn:active { transform: scale(0.95); }
@@ -164,43 +95,29 @@ body {
 
 .pot-face {
   position: absolute; inset: 0;
-  display: flex; align-items: center;
-  justify-content: center;
-  font-size: 80px;
+  display: flex; align-items: center; justify-content: center;
   transition: opacity 200ms, transform 200ms;
 }
+.pot-face img { width: 130px; image-rendering: pixelated; }
 .pot-face.gone { opacity: 0; transform: scale(0.85); pointer-events: none; }
 
 .recv-msg {
-  font-size: clamp(18px,5vw,22px);
-  font-weight: 800;
-  line-height: 1.35;
-  color: var(--ink);
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 250ms, transform 250ms;
-  padding: 0 8px;
+  font-size: clamp(18px,5vw,22px); font-weight: 800;
+  line-height: 1.35; color: var(--ink);
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 250ms, transform 250ms; padding: 0 8px;
 }
 .recv-msg.show { opacity: 1; transform: translateY(0); }
 
 .recv-from {
-  font-size: 13px;
-  color: var(--soft);
-  opacity: 0;
-  transition: opacity 400ms ease 200ms;
+  font-size: 14px; color: var(--soft);
+  opacity: 0; transition: opacity 400ms ease 200ms;
 }
 .recv-from.show { opacity: 1; }
 
-/* back button */
 .back-btn {
-  font-size: 12px;
-  color: var(--soft);
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-decoration: underline;
-  font: inherit;
-  margin-top: 8px;
+  font-size: 12px; color: var(--soft); background: none;
+  border: none; cursor: pointer; text-decoration: underline; font: inherit;
 }
 
 @keyframes pop {
@@ -208,27 +125,14 @@ body {
   45%  { transform: translateY(-10px) scale(1.12); }
   100% { transform: scale(1); }
 }
-
-/* emoji picker */
-.emoji-row {
-  display: flex; gap: 8px; flex-wrap: wrap;
-}
-.emoji-pick {
-  font-size: 22px; cursor: pointer;
-  padding: 4px 6px; border-radius: 8px;
-  border: 2px solid transparent;
-  transition: border 0.1s;
-  background: none;
-}
-.emoji-pick.active { border-color: var(--leaf); background: #e8f5ed; }
 </style>
 </head>
 <body>
 
-<!-- ══ MAKER SIDE (only you see this) ══ -->
+<!-- YOUR MAKER PAGE — only you see this -->
 <div class="maker" id="makerView">
   <div class="maker-title">🥕 carrot card maker</div>
-  <p class="maker-sub">create a card · share the link · they just tap</p>
+  <p class="maker-sub">write your message · copy the link · send on whatsapp</p>
 
   <div class="field">
     <label>your message</label>
@@ -241,21 +145,7 @@ body {
   </div>
 
   <div class="field">
-    <label>choose your gift 🎁</label>
-    <div class="emoji-row" id="emojiPicker">
-      <button class="emoji-pick active" onclick="pickEmoji(this,'🥕')">🥕</button>
-      <button class="emoji-pick" onclick="pickEmoji(this,'🌸')">🌸</button>
-      <button class="emoji-pick" onclick="pickEmoji(this,'🌻')">🌻</button>
-      <button class="emoji-pick" onclick="pickEmoji(this,'⭐')">⭐</button>
-      <button class="emoji-pick" onclick="pickEmoji(this,'🍰')">🍰</button>
-      <button class="emoji-pick" onclick="pickEmoji(this,'🎁')">🎁</button>
-      <button class="emoji-pick" onclick="pickEmoji(this,'🦋')">🦋</button>
-      <button class="emoji-pick" onclick="pickEmoji(this,'🐾')">🐾</button>
-    </div>
-  </div>
-
-  <div class="link-box">
-    <label style="font-size:13px;font-weight:800;color:var(--soft)">your shareable link</label>
+    <label>your shareable link — send this on whatsapp</label>
     <div class="link-row">
       <input class="link-input" id="linkOut" readonly/>
       <button class="btn-copy" onclick="copyLink()">copy</button>
@@ -266,82 +156,64 @@ body {
   <button class="btn-preview" onclick="preview()">preview what they see 👀</button>
 </div>
 
-<!-- ══ RECEIVER SIDE (what they see) ══ -->
+<!-- THEIR PAGE — what your husband sees -->
 <div class="receiver" id="receiverView">
   <p class="hint" id="hint">tap to open 🌱</p>
 
   <button class="pot-btn" id="potBtn" onclick="tapPot()">
+    <!-- EMPTY POT — shows before tap -->
     <div class="pot-face" id="potEmpty">
-  <img src="empty-pot.png" style="width:120px;image-rendering:pixelated"/>
-</div>
-<div class="pot-face gone" id="potFull">
-  <img src="carrot-pot.png" style="width:120px;image-rendering:pixelated"/>
-</div>
+      <img src="empty.png" alt="pot"/>
+    </div>
+    <!-- CARROT — shows after tap -->
+    <div class="pot-face gone" id="potFull">
+      <img src="carrot.png" alt="carrot"/>
+    </div>
   </button>
 
   <p class="recv-msg" id="recvMsg"></p>
   <p class="recv-from" id="recvFrom"></p>
-
   <button class="back-btn" id="backBtn" onclick="goBack()" style="display:none">← make your own</button>
 </div>
 
 <script>
-let chosenEmoji = '🥕';
 let grown = false;
 let resetTimer;
 
-// ── Emoji picker ──
-function pickEmoji(el, emoji) {
-  document.querySelectorAll('.emoji-pick').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  chosenEmoji = emoji;
-  document.getElementById('potFull').textContent = emoji;
-  buildLink();
-}
-
-// ── Build shareable link ──
 function buildLink() {
   const msg  = document.getElementById('msgInput').value.trim() || 'I grew this for you!';
   const from = document.getElementById('fromInput').value.trim() || '🌸';
   const url  = new URL(window.location.href);
-  url.searchParams.set('msg',   msg);
-  url.searchParams.set('from',  from);
-  url.searchParams.set('emoji', chosenEmoji);
-  url.searchParams.delete('view'); // maker mode — no view param
+  url.searchParams.set('msg',  msg);
+  url.searchParams.set('from', from);
   document.getElementById('linkOut').value = url.toString();
   document.getElementById('copyStatus').textContent = '';
 }
 
-// ── Copy link ──
 async function copyLink() {
   buildLink();
-  const val = document.getElementById('linkOut').value;
   try {
-    await navigator.clipboard.writeText(val);
+    await navigator.clipboard.writeText(document.getElementById('linkOut').value);
     document.getElementById('copyStatus').textContent = '✓ copied! send it on whatsapp 🌸';
   } catch {
     document.getElementById('copyStatus').textContent = 'select and copy manually';
   }
 }
 
-// ── Preview ──
 function preview() {
-  const msg   = document.getElementById('msgInput').value.trim() || 'I grew this for you!';
-  const from  = document.getElementById('fromInput').value.trim() || '🌸';
-  showReceiver(msg, from, chosenEmoji, true);
+  const msg  = document.getElementById('msgInput').value.trim() || 'I grew this for you!';
+  const from = document.getElementById('fromInput').value.trim() || '🌸';
+  showReceiver(msg, from, true);
 }
 
-// ── Show receiver view ──
-function showReceiver(msg, from, emoji, isPreview) {
+function showReceiver(msg, from, isPreview) {
   document.getElementById('makerView').style.display = 'none';
   document.getElementById('recvMsg').textContent  = msg;
   document.getElementById('recvFrom').textContent = from;
-  document.getElementById('potFull').textContent  = emoji || '🥕';
   document.getElementById('backBtn').style.display = isPreview ? 'block' : 'none';
   document.getElementById('receiverView').classList.add('show');
 }
 
-// ── Tap pot ──
 function tapPot() {
   if(grown) { resetPot(); return; }
   grown = true;
@@ -371,22 +243,18 @@ function goBack() {
   resetPot();
 }
 
-// ── Auto-update link as you type ──
 document.getElementById('msgInput').addEventListener('input', buildLink);
 document.getElementById('fromInput').addEventListener('input', buildLink);
 
-// ── On load — check if receiver mode ──
+// On load — if link has ?msg= show receiver, otherwise show maker
 const params = new URLSearchParams(window.location.search);
 if(params.get('msg')) {
-  // Someone opened a shared link — show receiver only
   showReceiver(
-    params.get('msg')   || 'I grew this for you!',
-    params.get('from')  || '🌸',
-    params.get('emoji') || '🥕',
+    params.get('msg')  || 'I grew this for you!',
+    params.get('from') || '🌸',
     false
   );
 } else {
-  // No params — show maker
   buildLink();
 }
 </script>
